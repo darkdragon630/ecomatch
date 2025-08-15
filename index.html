@@ -1,38 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Under Maintenance • Mode Misterius</title>
+  <meta name="description" content="Situs sedang dalam perbaikan. Sesuatu yang besar sedang disiapkan…" />
+  <style>
+    :root{
+      --bg:#0a0b10;              /* latar gelap */
+      --fg:#e6eaf2;              /* teks utama */
+      --muted:#aab2c5;           /* teks sekunder */
+      --neon:#6cf7c5;            /* aksen hijau neon */
+      --vio:#7a7cff;             /* aksen violet */
+      --danger:#ff6b6b;          /* merah lembut */
+      --card:#0f111aee;          /* panel transparan */
+      --grid:#1a1d2a;            /* garis grid */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0; font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--fg); background:radial-gradient(1200px 800px at 80% 10%, #161a2a 0%, #0c0f1a 40%, var(--bg) 65%) fixed;
+      overflow:hidden;
+    }
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+    /* Lapisan efek atmosfer */
+    .grain{position:fixed;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:soft-light;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');background-size:160px}
+    .scanline{position:fixed;inset:0;background:repeating-linear-gradient( to bottom, transparent 0 2px, rgba(255,255,255,.03) 2px 3px );mix-blend-mode:soft-light;pointer-events:none}
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+    .wrap{position:relative;display:grid;place-items:center;min-height:100dvh;padding:24px}
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="/">
+    /* Grid dekoratif */
+    .grid{
+      position:absolute;inset:0;opacity:.25;mask-image:linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
+      background-image: 
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 40px 40px, 40px 40px;
+      transform: perspective(800px) rotateX(55deg) translateY(22vh);
+      transform-origin: center top;
+      filter: drop-shadow(0 10px 20px #00000050);
+    }
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+    /* Kartu utama */
+    .card{
+      position:relative; max-width:820px; width:100%; padding:28px 28px 24px; border-radius:22px;
+      background:linear-gradient(180deg, #101423 0%, #0b0f1a 100%);
+      box-shadow: 0 30px 80px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);
+      backdrop-filter: blur(6px);
+    }
+    .card::before{ /* garis neon */
+      content:""; position:absolute; inset:-1px; border-radius:22px;
+      background: conic-gradient(from 180deg, var(--neon), var(--vio), var(--neon));
+      filter: blur(18px); opacity:.12; z-index:-1;
+    }
 
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="ecomatch">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    /* Judul glitch */
+    .title{font-weight:800; letter-spacing:.5px; font-size: clamp(28px, 4.5vw, 52px); line-height:1.05; margin:6px 0 10px; position:relative}
+    .title .ghost{position:absolute; inset:0; color:var(--vio); clip-path:inset(0 0 55% 0); transform:translate(2px, -1px); opacity:.5; mix-blend-mode:screen; animation:shift 4s infinite ease-in-out}
+    .title .ghost2{position:absolute; inset:0; color:var(--neon); clip-path:inset(45% 0 0 0); transform:translate(-2px, 1px); opacity:.5; mix-blend-mode:screen; animation:shift2 3.2s infinite ease-in-out}
+    @keyframes shift{0%,100%{transform:translate(2px,-1px)}50%{transform:translate(1px,-2px)}}
+    @keyframes shift2{0%,100%{transform:translate(-2px,1px)}50%{transform:translate(-1px,2px)}}
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+    .subtitle{color:var(--muted); font-size:clamp(14px, 1.6vw, 16px); margin:2px 0 18px}
 
-  <title>ecomatch</title>
-  <link rel="manifest" href="manifest.json">
+    /* Progress */
+    .progress{position:relative; height:12px; border-radius:999px; background:#0e1322; overflow:hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06)}
+    .bar{height:100%; width:0%; background: linear-gradient(90deg, var(--neon), var(--vio)); box-shadow:0 0 22px #6cf7c588}
+    .status{display:flex; justify-content:space-between; align-items:center; margin:10px 2px 0; font-size:13px; color:var(--muted)}
+
+    /* Tombol */
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+    .btn{appearance:none; border:none; cursor:pointer; padding:10px 14px; border-radius:14px; background:#0e1322; color:var(--fg); font-weight:600; letter-spacing:.2px; transition:.25s; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06)}
+    .btn:hover{transform:translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.12)}
+    .btn.primary{background:linear-gradient(180deg, #172033, #0e1626); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08)}
+
+    /* Footer kecil */
+    .foot{margin-top:18px; color:#8c93a8; font-size:12px; opacity:.9}
+
+    /* Partikel kabut */
+    .fog{ position:fixed; inset:-20%; pointer-events:none; background:radial-gradient(circle at 50% 50%, rgba(124,140,255,.06), transparent 45%); filter: blur(28px); animation:fog 18s linear infinite; mix-blend-mode:screen; }
+    .fog.f2{ animation-duration:26s; animation-direction:reverse; opacity:.75}
+    .fog.f3{ animation-duration:32s; opacity:.55}
+    @keyframes fog{ 0%{ transform:translate3d(-8%, -4%, 0) scale(1) } 50%{ transform:translate3d(8%, 6%, 0) scale(1.05) } 100%{ transform:translate3d(-8%, -4%, 0) scale(1) } }
+
+    /* Responsif */
+    @media (max-width: 520px){ .card{padding:22px} .actions{justify-content:space-between} }
+  </style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <div class="grain"></div>
+  <div class="scanline"></div>
+  <div class="fog f1"></div>
+  <div class="fog f2"></div>
+  <div class="fog f3"></div>
+
+  <div class="wrap">
+    <div class="grid" aria-hidden="true"></div>
+
+    <main class="card" aria-live="polite">
+      <h1 class="title" aria-label="Sedang Dalam Perbaikan">
+        <span>SEDANG DALAM PERBAIKAN</span>
+        <span class="ghost" aria-hidden="true">SEDANG DALAM PERBAIKAN</span>
+        <span class="ghost2" aria-hidden="true">SEDANG DALAM PERBAIKAN</span>
+      </h1>
+      <p class="subtitle">Kami sedang menyiapkan sesuatu yang <strong>lebih cepat</strong>, <strong>lebih cerdas</strong>, dan sedikit… <em>misterius</em>. Tetap di sini—pintu akan terbuka sebentar lagi.</p>
+
+      <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="bar" id="bar"></div>
+      </div>
+      <div class="status">
+        <span id="phase">Menginisialisasi sistem…</span>
+        <span><span id="pct">0</span>%</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="notify">Beritahu Saya Saat Selesai</button>
+        <a class="btn" href="mailto:hello@example.com" id="mailto">Kontak</a>
+        <a class="btn" href="#" id="ig">Instagram</a>
+      </div>
+
+      <p class="foot">© <span id="year"></span> — Mode pemeliharaan aktif. Kode status: <code id="code">0x00</code></p>
+    </main>
+  </div>
+
+  <script>
+    // Helper elemen
+    const bar = document.getElementById('bar');
+    const pct = document.getElementById('pct');
+    const phase = document.getElementById('phase');
+    const code = document.getElementById('code');
+    const year = document.getElementById('year');
+    year.textContent = new Date().getFullYear();
+
+    // Tahapan dramatis
+    const steps = [
+      'Menginisialisasi sistem…',
+      'Mensinkronkan modul…',
+      'Mendekripsi blueprint…',
+      'Menyiapkan antarmuka…',
+      'Kalibrasi mesin…',
+      'Mengunci portal…',
+      'Hampir siap…'
+    ];
+
+    // Animasi progress organik
+    let progress = 0;
+    let stepIndex = 0;
+    function tick(){
+      // Naik acak tapi menurun laju mendekati 97%
+      const max = 97; // jangan 100 agar terasa hidup
+      const delta = Math.max(0.3, (max - progress) * 0.08) * Math.random();
+      progress = Math.min(max, progress + delta);
+      bar.style.width = progress.toFixed(2) + '%';
+      pct.textContent = Math.floor(progress);
+
+      // Ganti status fase sesekali
+      if (Math.random() > 0.7){
+        stepIndex = (stepIndex + 1) % steps.length;
+        phase.textContent = steps[stepIndex];
+        code.textContent = '0x' + (Math.floor(Math.random()*255).toString(16)).padStart(2,'0');
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // Tombol notifikasi selesai (Notification API)
+    document.getElementById('notify').addEventListener('click', async () => {
+      if (!('Notification' in window)) { alert('Browser kamu belum mendukung Notification API.'); return; }
+      let perm = Notification.permission;
+      if (perm !== 'granted') perm = await Notification.requestPermission();
+      if (perm === 'granted') {
+        new Notification('Kami akan memanggilmu saat pintu terbuka.', { body: 'Notifikasi aktif. Tetap dekat.', icon: undefined });
+      }
+    });
+
+    // Link kontak dan IG (ganti sesuai kebutuhan)
+    document.getElementById('mailto').href = 'mailto:contact@domainmu.com?subject=Notifikasi%20Maintenance&body=Halo,%20bolehkah%20beri%20tahu%20saat%20situs%20aktif%20kembali?';
+    document.getElementById('ig').href = 'https://www.instagram.com/your_handle';
+
+    // Easter egg kecil di console
+    (function(){
+      const msg = [
+        '%c ACCESS', '%c GRANTED ', '%c▶', '%c Sistem bayangan aktif', '\n',
+      ];
+      const s1 = 'background:#111;color:#6cf7c5;padding:2px 6px;border-radius:6px 0 0 6px;font-weight:700';
+      const s2 = 'background:#0e1626;color:#e6eaf2;padding:2px 6px;border-radius:0 6px 6px 0;font-weight:700';
+      const s3 = 'color:#7a7cff;font-weight:700';
+      const s4 = 'color:#aab2c5';
+      console.log(msg[0], s1, msg[1], s2, msg[2], s3, msg[3], s4);
+    })();
+  </script>
 </body>
 </html>
