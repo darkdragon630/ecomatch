@@ -1,195 +1,251 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Under Maintenance • Mode Misterius</title>
-  <meta name="description" content="Situs sedang dalam perbaikan. Sesuatu yang besar sedang disiapkan…" />
-  <style>
-    :root{
-      --bg:#0a0b10;              /* latar gelap */
-      --fg:#e6eaf2;              /* teks utama */
-      --muted:#aab2c5;           /* teks sekunder */
-      --neon:#6cf7c5;            /* aksen hijau neon */
-      --vio:#7a7cff;             /* aksen violet */
-      --danger:#ff6b6b;          /* merah lembut */
-      --card:#0f111aee;          /* panel transparan */
-      --grid:#1a1d2a;            /* garis grid */
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;}
-    body{
-      margin:0; font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--fg); background:radial-gradient(1200px 800px at 80% 10%, #161a2a 0%, #0c0f1a 40%, var(--bg) 65%) fixed;
-      overflow:hidden;
-    }
-
-    /* Lapisan efek atmosfer */
-    .grain{position:fixed;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:soft-light;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');background-size:160px}
-    .scanline{position:fixed;inset:0;background:repeating-linear-gradient( to bottom, transparent 0 2px, rgba(255,255,255,.03) 2px 3px );mix-blend-mode:soft-light;pointer-events:none}
-
-    .wrap{position:relative;display:grid;place-items:center;min-height:100dvh;padding:24px}
-
-    /* Grid dekoratif */
-    .grid{
-      position:absolute;inset:0;opacity:.25;mask-image:linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
-      background-image: 
-        linear-gradient(var(--grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-      background-size: 40px 40px, 40px 40px;
-      transform: perspective(800px) rotateX(55deg) translateY(22vh);
-      transform-origin: center top;
-      filter: drop-shadow(0 10px 20px #00000050);
-    }
-
-    /* Kartu utama */
-    .card{
-      position:relative; max-width:820px; width:100%; padding:28px 28px 24px; border-radius:22px;
-      background:linear-gradient(180deg, #101423 0%, #0b0f1a 100%);
-      box-shadow: 0 30px 80px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);
-      backdrop-filter: blur(6px);
-    }
-    .card::before{ /* garis neon */
-      content:""; position:absolute; inset:-1px; border-radius:22px;
-      background: conic-gradient(from 180deg, var(--neon), var(--vio), var(--neon));
-      filter: blur(18px); opacity:.12; z-index:-1;
-    }
-
-    /* Judul glitch */
-    .title{font-weight:800; letter-spacing:.5px; font-size: clamp(28px, 4.5vw, 52px); line-height:1.05; margin:6px 0 10px; position:relative}
-    .title .ghost{position:absolute; inset:0; color:var(--vio); clip-path:inset(0 0 55% 0); transform:translate(2px, -1px); opacity:.5; mix-blend-mode:screen; animation:shift 4s infinite ease-in-out}
-    .title .ghost2{position:absolute; inset:0; color:var(--neon); clip-path:inset(45% 0 0 0); transform:translate(-2px, 1px); opacity:.5; mix-blend-mode:screen; animation:shift2 3.2s infinite ease-in-out}
-    @keyframes shift{0%,100%{transform:translate(2px,-1px)}50%{transform:translate(1px,-2px)}}
-    @keyframes shift2{0%,100%{transform:translate(-2px,1px)}50%{transform:translate(-1px,2px)}}
-
-    .subtitle{color:var(--muted); font-size:clamp(14px, 1.6vw, 16px); margin:2px 0 18px}
-
-    /* Progress */
-    .progress{position:relative; height:12px; border-radius:999px; background:#0e1322; overflow:hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06)}
-    .bar{height:100%; width:0%; background: linear-gradient(90deg, var(--neon), var(--vio)); box-shadow:0 0 22px #6cf7c588}
-    .status{display:flex; justify-content:space-between; align-items:center; margin:10px 2px 0; font-size:13px; color:var(--muted)}
-
-    /* Tombol */
-    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
-    .btn{appearance:none; border:none; cursor:pointer; padding:10px 14px; border-radius:14px; background:#0e1322; color:var(--fg); font-weight:600; letter-spacing:.2px; transition:.25s; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06)}
-    .btn:hover{transform:translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.12)}
-    .btn.primary{background:linear-gradient(180deg, #172033, #0e1626); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08)}
-
-    /* Footer kecil */
-    .foot{margin-top:18px; color:#8c93a8; font-size:12px; opacity:.9}
-
-    /* Partikel kabut */
-    .fog{ position:fixed; inset:-20%; pointer-events:none; background:radial-gradient(circle at 50% 50%, rgba(124,140,255,.06), transparent 45%); filter: blur(28px); animation:fog 18s linear infinite; mix-blend-mode:screen; }
-    .fog.f2{ animation-duration:26s; animation-direction:reverse; opacity:.75}
-    .fog.f3{ animation-duration:32s; opacity:.55}
-    @keyframes fog{ 0%{ transform:translate3d(-8%, -4%, 0) scale(1) } 50%{ transform:translate3d(8%, 6%, 0) scale(1.05) } 100%{ transform:translate3d(-8%, -4%, 0) scale(1) } }
-
-    /* Responsif */
-    @media (max-width: 520px){ .card{padding:22px} .actions{justify-content:space-between} }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecomatch - Sedang Dalam Pemeliharaan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #10B981; /* Warna hijau Ecomatch */
+            --secondary: #059669;
+            --accent: #065F46;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .maintenance-illustration {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .progress-bar {
+            position: relative;
+            height: 6px;
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+        }
+        .progress-status {
+            position: absolute;
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            animation: progress-animation 2s ease-in-out infinite alternate;
+        }
+        @keyframes progress-animation {
+            0% { width: 60%; }
+            100% { width: 65%; }
+        }
+        .logo-text {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+    </style>
 </head>
-<body>
-  <div class="grain"></div>
-  <div class="scanline"></div>
-  <div class="fog f1"></div>
-  <div class="fog f2"></div>
-  <div class="fog f3"></div>
+<body class="text-gray-800">
+    <div class="container mx-auto px-6 py-16 max-w-4xl flex flex-col items-center justify-center flex-grow">
+        <div class="mb-12 flex flex-col items-center">
+            <div class="text-center mb-2">
+                <img src="https://storage.googleapis.com/rrg-public/ecomatch-logo.png" alt="Logo Ecomatch - Platform Ekonomi Sirkuler Berkelanjutan" class="h-20 mx-auto" />
+            </div>
+            
+            <div class="maintenance-illustration mb-8">
+                <img src="https://placehold.co/600x400" alt="Ilustrasi digital tim teknisi sedang melakukan pemeliharaan sistem dengan simbol daur ulang dan ikon hijau" class="mx-auto w-full max-w-lg" />
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">Sedang Dalam Pemeliharaan</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Kami sedang melakukan pemeliharaan sistem untuk pengalaman yang lebih baik.
+                Ecomatch akan segera kembali online. Terima kasih atas pengertian Anda!
+            </p>
+            
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-green-50 text-green-700 mb-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 animate-pulse" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd" />
+                </svg>
+                <span class="font-medium">Status: Pemeliharaan Sedang Berlangsung</span>
+            </div>
+        </div>
+        
+        <div class="w-full max-w-2xl bg-white rounded-xl shadow-md overflow-hidden p-6 mb-12">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-800">Perkiraan Waktu Selesai</h2>
+                <div class="text-sm font-medium bg-green-100 text-green-800 px-2 py-1 rounded">
+                    <span id="countdown-timer">30:00</span>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <div class="progress-bar">
+                    <div class="progress-status"></div>
+                </div>
+                <div class="flex justify-between mt-2">
+                    <span class="text-xs text-gray-500">Dimulai: Hari Ini 10:00 WIB</span>
+                    <span class="text-xs text-gray-500">Perkiraan: Hari Ini 10:30 WIB</span>
+                </div>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 h-5 w-5 text-green-500 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-2">
+                        <p class="text-sm font-medium text-gray-800">Optimasi database</p>
+                        <p class="text-xs text-gray-500">Selesai (100%)</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 h-5 w-5 text-blue-500 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-2">
+                        <p class="text-sm font-medium text-gray-800">Pembaruan sistem</p>
+                        <p class="text-xs text-gray-500">Sedang berlangsung (65%)</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 h-5 w-5 text-gray-400 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-2">
+                        <p class="text-sm font-medium text-gray-800">Peningkatan keamanan</p>
+                        <p class="text-xs text-gray-500">Menunggu (0%)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Butuh bantuan segera?</h3>
+            <p class="text-gray-600 mb-6 max-w-lg mx-auto">
+                Tim dukungan kami tetap tersedia selama pemeliharaan untuk masalah penting.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="mailto:support@ecomatch.id" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                    </svg>
+                    Email Dukungan
+                </a>
+                <a href="tel:+6281123456789" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                    </svg>
+                    Telepon Dukungan
+                </a>
+            </div>
+            
+            <div class="mt-10">
+                <p class="text-sm text-gray-500 max-w-prose mx-auto">
+                    Ecomatch memohon maaf atas ketidaknyamanan ini. Pemeliharaan ini bertujuan untuk:
+                    <ul class="text-sm text-gray-500 text-left max-w-prose mx-auto list-disc pl-5 mt-2">
+                        <li>Meningkatkan kecepatan dan keandalan platform</li>
+                        <li>Menambahkan fitur baru untuk mendukung ekonomi sirkuler</li>
+                        <li>Memperbaiki kerentanan keamanan</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-white py-6 border-t border-gray-200">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col items-center">
+                <p class="text-gray-500 text-sm">© 2023 PT. Ecomatch Indonesia. All rights reserved.</p>
+                <div class="flex space-x-4 mt-2">
+                    <a href="#" class="text-gray-400 hover:text-green-600">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-green-600">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-  <div class="wrap">
-    <div class="grid" aria-hidden="true"></div>
-
-    <main class="card" aria-live="polite">
-      <h1 class="title" aria-label="Sedang Dalam Perbaikan">
-        <span>SEDANG DALAM PERBAIKAN</span>
-        <span class="ghost" aria-hidden="true">SEDANG DALAM PERBAIKAN</span>
-        <span class="ghost2" aria-hidden="true">SEDANG DALAM PERBAIKAN</span>
-      </h1>
-      <p class="subtitle">Kami sedang menyiapkan sesuatu yang <strong>lebih cepat</strong>, <strong>lebih cerdas</strong>, dan sedikit… <em>misterius</em>. Tetap di sini—pintu akan terbuka sebentar lagi.</p>
-
-      <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="bar" id="bar"></div>
-      </div>
-      <div class="status">
-        <span id="phase">Menginisialisasi sistem…</span>
-        <span><span id="pct">0</span>%</span>
-      </div>
-
-      <div class="actions">
-        <button class="btn primary" id="notify">Beritahu Saya Saat Selesai</button>
-        <a class="btn" href="mailto:hello@example.com" id="mailto">Kontak</a>
-        <a class="btn" href="#" id="ig">Instagram</a>
-      </div>
-
-      <p class="foot">© <span id="year"></span> — Mode pemeliharaan aktif. Kode status: <code id="code">0x00</code></p>
-    </main>
-  </div>
-
-  <script>
-    // Helper elemen
-    const bar = document.getElementById('bar');
-    const pct = document.getElementById('pct');
-    const phase = document.getElementById('phase');
-    const code = document.getElementById('code');
-    const year = document.getElementById('year');
-    year.textContent = new Date().getFullYear();
-
-    // Tahapan dramatis
-    const steps = [
-      'Menginisialisasi sistem…',
-      'Mensinkronkan modul…',
-      'Mendekripsi blueprint…',
-      'Menyiapkan antarmuka…',
-      'Kalibrasi mesin…',
-      'Mengunci portal…',
-      'Hampir siap…'
-    ];
-
-    // Animasi progress organik
-    let progress = 0;
-    let stepIndex = 0;
-    function tick(){
-      // Naik acak tapi menurun laju mendekati 97%
-      const max = 97; // jangan 100 agar terasa hidup
-      const delta = Math.max(0.3, (max - progress) * 0.08) * Math.random();
-      progress = Math.min(max, progress + delta);
-      bar.style.width = progress.toFixed(2) + '%';
-      pct.textContent = Math.floor(progress);
-
-      // Ganti status fase sesekali
-      if (Math.random() > 0.7){
-        stepIndex = (stepIndex + 1) % steps.length;
-        phase.textContent = steps[stepIndex];
-        code.textContent = '0x' + (Math.floor(Math.random()*255).toString(16)).padStart(2,'0');
-      }
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-
-    // Tombol notifikasi selesai (Notification API)
-    document.getElementById('notify').addEventListener('click', async () => {
-      if (!('Notification' in window)) { alert('Browser kamu belum mendukung Notification API.'); return; }
-      let perm = Notification.permission;
-      if (perm !== 'granted') perm = await Notification.requestPermission();
-      if (perm === 'granted') {
-        new Notification('Kami akan memanggilmu saat pintu terbuka.', { body: 'Notifikasi aktif. Tetap dekat.', icon: undefined });
-      }
-    });
-
-    // Link kontak dan IG (ganti sesuai kebutuhan)
-    document.getElementById('mailto').href = 'mailto:burhanjepara41@gmail.com?subject=Notifikasi%20Maintenance&body=Halo,%20bolehkah%20beri%20tahu%20saat%20situs%20aktif%20kembali?';
-    document.getElementById('ig').href = 'https://www.instagram.com/sazen.corp?igsh=emZtanQ3OG55YXdw';
-
-    // Easter egg kecil di console
-    (function(){
-      const msg = [
-        '%c ACCESS', '%c GRANTED ', '%c▶', '%c Sistem bayangan aktif', '\n',
-      ];
-      const s1 = 'background:#111;color:#6cf7c5;padding:2px 6px;border-radius:6px 0 0 6px;font-weight:700';
-      const s2 = 'background:#0e1626;color:#e6eaf2;padding:2px 6px;border-radius:0 6px 6px 0;font-weight:700';
-      const s3 = 'color:#7a7cff;font-weight:700';
-      const s4 = 'color:#aab2c5';
-      console.log(msg[0], s1, msg[1], s2, msg[2], s3, msg[3], s4);
-    })();
-  </script>
+    <script>
+        // Countdown timer
+        function updateCountdown() {
+            let minutes = 30;
+            let seconds = 0;
+            
+            const timerElement = document.getElementById('countdown-timer');
+            
+            const interval = setInterval(() => {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        clearInterval(interval);
+                        timerElement.textContent = "Pemeliharaan Selesai";
+                        timerElement.classList.remove('bg-green-100', 'text-green-800');
+                        timerElement.classList.add('bg-blue-100', 'text-blue-800');
+                        return;
+                    }
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    seconds--;
+                }
+                
+                const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+                const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+                timerElement.textContent = `${formattedMinutes}:${formattedSeconds}`;
+            }, 1000);
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCountdown();
+            
+            // Change maintenance status when countdown completes
+            setTimeout(() => {
+                const statusElement = document.querySelector('.inline-flex.items-center');
+                if (statusElement) {
+                    statusElement.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium">Status: Pemeliharaan Selesai</span>
+                    `;
+                    statusElement.classList.remove('bg-green-50', 'text-green-700');
+                    statusElement.classList.add('bg-blue-50', 'text-blue-700');
+                    
+                    // Update header text
+                    const header = document.querySelector('h1');
+                    if (header) {
+                        header.textContent = "Pemeliharaan Selesai!";
+                    }
+                    
+                    // Update subheader text
+                    const subheader = document.querySelector('h1 + p');
+                    if (subheader) {
+                        subheader.textContent = "Ecomatch telah kembali online dengan pembaruan terbaru. Selamat menikmati pengalaman baru!";
+                    }
+                }
+            }, 30 * 60 * 1000);
+        });
+    </script>
 </body>
 </html>
