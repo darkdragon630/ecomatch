@@ -49586,7 +49586,7 @@ n=o.a
 o=o.b
 m=n*0.04
 l=n*0.03
-k=A.aH(e,e,B.k,e,e,new A.aT(e,B.H2,e,A.bh(12),e,e,B.y),e,100,new A.a7(l,0,l,0),e,e,e,1/0)
+k=A.aH(e,e,B.k,e,e,new A.aT(e,B.H2,e,A.bh(12),e,e,B.y),e,120,new A.a7(l,0,l,0),e,e,e,1/0)
 j=A.a6h(B.i,s.aeI(q),e,e,n*0.075)
 i=this.c
 h=A.b4("Hi, "+p,e,e,e,A.dJ(e,e,B.i,e,e,e,e,e,d,e,e,i?11:14,e,e,e,e,e,!0,e,e,e,e,e,e,e,e),e,e)
@@ -49598,7 +49598,7 @@ f=A.c5(e,A.aH(e,i,B.k,e,e,new A.aT(B.nY,e,e,f,e,e,B.y),e,e,e,B.cE,e,e,e),B.z,!1,
 i=A.bh(10)
 i=A.bT(A.a([j,B.lI,h,f,B.cp,A.c5(e,A.fl(B.b1,A.a([A.aH(e,A.cH("assets/icons/notif_icon.png",e,e,24,24),B.k,e,e,new A.aT(B.nY,e,e,i,e,e,B.y),e,e,e,B.cE,e,e,e),A.oO(e,A.aH(e,e,B.k,e,e,B.Df,e,6,e,e,e,e,6),e,e,e,0,0,e)],g),B.k,B.aW),B.z,!1,e,e,e,e,e,e,e,e,e,e,e,e,e,s.gaki(),e,e,e,e,e,e)],g),B.o,B.q,B.n)
 f=A.bh(10)
-return A.c2(A.a([A.aH(e,new A.ba(new A.a7(m,o*0.06,n*0.02,m),A.c2(A.a([k,B.Ub,new A.ba(new A.a7(l,0,l,0),i,e),B.bt,A.aH(e,A.bT(A.a([A.cH("assets/icons/search_icon.png",e,e,20,20),B.lI,A.dE(A.tG(!0,B.bq,!1,e,!0,B.A,e,A.zq(),e,e,e,e,e,e,2,B.Kr,B.z,!0,e,!0,e,!1,e,B.bM,e,e,e,e,e,e,e,1,e,e,!1,"\u2022",e,new A.aw2(s),e,e,e,!1,e,!1,e,!0,e,B.bC,e,e,B.bx,B.bk,e,e,e,e,e,e,B.lV,B.ad,e,B.cM,e,e,e,e),1)],g),B.o,B.q,B.n),B.k,e,e,new A.aT(B.i,e,e,f,B.Nt,e,B.y),e,45,new A.a7(l,0,l,0),B.d3,e,e,e)],g),B.o,B.q,B.n),e),B.k,e,e,B.Dj,e,o*0.46,e,e,e,e,n),A.dE(A.b_n(new A.aw3(s),s.gPD().length,B.Id,new A.aw4()),1)],g),B.o,B.q,B.n)},
+return A.c2(A.a([A.aH(e,new A.ba(new A.a7(m,o*0.06,n*0.02,m),A.c2(A.a([k,B.Ub,new A.ba(new A.a7(l,0,l,0),i,e),B.bt,A.aH(e,A.bT(A.a([A.cH("assets/icons/search_icon.png",e,e,20,20),B.lI,A.dE(A.tG(!0,B.bq,!1,e,!0,B.A,e,A.zq(),e,e,e,e,e,e,2,B.Kr,B.z,!0,e,!0,e,!1,e,B.bM,e,e,e,e,e,e,e,1,e,e,!1,"\u2022",e,new A.aw2(s),e,e,e,!1,e,!1,e,!0,e,B.bC,e,e,B.bx,B.bk,e,e,e,e,e,e,B.lV,B.ad,e,B.cM,e,e,e,e),1)],g),B.o,B.q,B.n),B.k,e,e,new A.aT(B.i,e,e,f,B.Nt,e,B.y),e,45,new A.a7(l,0,l,0),B.d3,e,e,e)],g),B.o,B.q,B.n),e),B.k,e,e,B.Dj,e,o*0.45,e,e,e,e,n),A.dE(A.b_n(new A.aw3(s),s.gPD().length,B.Id,new A.aw4()),1)],g),B.o,B.q,B.n)},
 $S:394}
 A.aw2.prototype={
 $1(a){var s=this.a
